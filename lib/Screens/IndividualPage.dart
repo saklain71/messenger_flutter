@@ -1,4 +1,5 @@
 
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:messenger_flutter/CustomUi/OwnMessageCard.dart';
@@ -27,16 +28,16 @@ class _IndividualPageState extends State<IndividualPage> {
   @override
   void initState() {
     super.initState();
-     connect();
+     // connect();
 
-    // focusNode.addListener(() {
-    //   if (focusNode.hasFocus) {
-    //     setState(() {
-    //       show = false;
-    //     });
-    //   }
-    // });
-    // connect();
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        setState(() {
+          show = false;
+        });
+      }
+    });
+    connect();
     print('trying to connect socket.io');
   }
 
@@ -93,6 +94,7 @@ class _IndividualPageState extends State<IndividualPage> {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(60),
             child: AppBar(
+              elevation: 0,
               leadingWidth: 70,
               titleSpacing: 0,
               leading: InkWell(
@@ -105,6 +107,7 @@ class _IndividualPageState extends State<IndividualPage> {
                     Icon(
                       Icons.arrow_back,
                       size: 24,
+                        color: Colors.blueGrey
                     ),
                     CircleAvatar(
                       child: SvgPicture.asset(
@@ -133,6 +136,7 @@ class _IndividualPageState extends State<IndividualPage> {
                         widget.chatModel.name,
                         style: TextStyle(
                           fontSize: 18.5,
+                          color: Colors.blueGrey,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -140,6 +144,7 @@ class _IndividualPageState extends State<IndividualPage> {
                         "last seen today at ${widget.chatModel.time}",
                         style: TextStyle(
                           fontSize: 13,
+                            color: Colors.blueGrey
                         ),
                       )
                     ],
@@ -147,13 +152,14 @@ class _IndividualPageState extends State<IndividualPage> {
                 ),
               ),
               actions: [
-                IconButton(icon: Icon(Icons.videocam), onPressed: () {
+                IconButton(icon: Icon(Icons.videocam),color: Colors.blueGrey, onPressed: () {
                   print("BDCOM");
                 }),
-                IconButton(icon: Icon(Icons.call), onPressed: () {
+                IconButton(icon: Icon(Icons.call), color: Colors.blueGrey,onPressed: () {
                   print("BDCOM");
                 }),
                 PopupMenuButton<String>(
+                  color: Colors.blueGrey,
                   padding: EdgeInsets.all(0),
                   onSelected: (value) {
                     print(value);
@@ -188,6 +194,7 @@ class _IndividualPageState extends State<IndividualPage> {
                   },
                 ),
               ],
+              backgroundColor: Colors.white70,
             ),
           ),
           body: Container(
@@ -343,6 +350,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                   ),
                                 ),
                               ),
+                              emojiSelect(),
                             ],
                           ),
                           show ? emojiSelect() : Container(),
@@ -350,6 +358,7 @@ class _IndividualPageState extends State<IndividualPage> {
                       ),
                     ),
                   ),
+
                 ],
               ),
               onWillPop: () {
@@ -383,8 +392,13 @@ class _IndividualPageState extends State<IndividualPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(
-                      Icons.insert_drive_file, Colors.indigo, "Document"),
+                  InkWell(
+                    child: iconCreation(
+                        Icons.insert_drive_file, Colors.indigo, "Document"),
+                    onTap: (){
+                      print('Document');
+                    },
+                  ),
                   SizedBox(
                     width: 40,
                   ),
@@ -450,15 +464,18 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget emojiSelect() {
-    // return EmojiPicker(
-    //     rows: 4,
-    //     columns: 7,
-    //     onEmojiSelected: (emoji, category) {
-    //       print(emoji);
-    //       setState(() {
-    //         _controller.text = _controller.text + emoji.emoji;
-    //       });
-    //     });
-    return Container();
+    return EmojiPicker(
+      config: Config(
+        columns: 7
+      ),
+        //rows: 4,
+        //columns: 7,
+        onEmojiSelected: (emoji, category) {
+          print(emoji);
+          setState(() {
+            _controller.text = _controller.text + emoji.toString();
+          });
+        });
+    //return Container();
   }
 }

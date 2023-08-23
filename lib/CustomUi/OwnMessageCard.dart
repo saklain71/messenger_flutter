@@ -25,6 +25,17 @@ class OwnMessageCard extends StatelessWidget {
                   fontSize: 16,
                 ),
               ),
+            ),
+            Positioned(
+              bottom: 4,
+                right: 10,
+                child: Text(
+                  time,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.grey[600],
+                  ),
+                ),
             )
           ],
         ),
