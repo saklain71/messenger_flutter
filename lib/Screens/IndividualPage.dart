@@ -43,7 +43,7 @@ class _IndividualPageState extends State<IndividualPage> {
 
    void connect() {
     // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
-    socket = IO.io("http://localhost:5000/", <String, dynamic>{
+    socket = IO.io("http://210.4.64.216:5000", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
@@ -159,7 +159,7 @@ class _IndividualPageState extends State<IndividualPage> {
                   print("BDCOM");
                 }),
                 PopupMenuButton<String>(
-                  color: Colors.blueGrey,
+                  color: Colors.white,
                   padding: EdgeInsets.all(0),
                   onSelected: (value) {
                     print(value);
@@ -251,7 +251,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                     focusNode: focusNode,
                                     textAlignVertical: TextAlignVertical.center,
                                     keyboardType: TextInputType.multiline,
-                                    maxLines: 5,
+                                    maxLines: 7,
                                     minLines: 1,
                                     onChanged: (value) {
                                       if (value.length > 0) {
@@ -319,7 +319,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                 padding: const EdgeInsets.only(
                                   bottom: 8,
                                   right: 2,
-                                  left: 2,
+                                  left: 4,
                                 ),
                                 child: CircleAvatar(
                                   radius: 25,
@@ -350,15 +350,14 @@ class _IndividualPageState extends State<IndividualPage> {
                                   ),
                                 ),
                               ),
-                              emojiSelect(),
+                              // emojiSelect(),
                             ],
                           ),
-                          show ? emojiSelect() : Container(),
+                          //show ? emojiSelect() : Container(),
                         ],
                       ),
                     ),
                   ),
-
                 ],
               ),
               onWillPop: () {

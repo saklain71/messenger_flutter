@@ -18,16 +18,16 @@ class _SelectContactState extends State<SelectContact> {
   Widget build(BuildContext context) {
 
     List<ChatModel> contacts = [
-      ChatModel(name: "Dev Stack", status: "A full stack developer", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Balram", status: "Flutter Developer...........", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Saket", status: "Web developer...", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Bhanu Dev", status: "App developer....", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Collins", status: "Raect developer..", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Kishor", status: "Full Stack Web", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Rashed", status: "A full stack developer", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Ramim", status: "Flutter Developer...........", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Sami", status: "Web developer...", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Faiyaz", status: "App developer....", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Shahed", status: "Raect developer..", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Niloy", status: "Full Stack Web", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
       ChatModel(name: "Testing1", status: "Example work", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
       ChatModel(name: "Testing2", status: "Sharing is caring", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Divyanshu", status: ".....", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-      ChatModel(name: "Helper", status: "Love you Mom Dad", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Robin", status: ".....", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+      ChatModel(name: "Rumy", status: "Love you Mom Dad", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
       ChatModel(name: "Tester", status: "I find the bugs", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
     ];
 

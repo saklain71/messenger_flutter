@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:messenger_flutter/CustomUi/ButtonCard.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
 
 import 'Homescreen.dart';
@@ -15,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
    ChatModel? sourceChat;
   List<ChatModel> chatmodels = [
     ChatModel(
-      name: "Dev Stack",
+      name: "Rashed",
       isGroup: false,
       currentMessage: "Hi Everyone",
       time: "4:00",
@@ -23,36 +24,36 @@ class _LoginScreenState extends State<LoginScreen> {
       id: 1, status: '',
     ),
     ChatModel(
-      name: "Kishor",
+      name: "Shahed",
       isGroup: false,
-      currentMessage: "Hi Kishor",
+      currentMessage: "Hi Rashed",
       time: "13:00",
       icon: "person.svg",
       id: 2, status: '',
     ),
 
     ChatModel(
-      name: "Collins",
+      name: "Faiyaz",
       isGroup: false,
-      currentMessage: "Hi Dev Stack",
+      currentMessage: "Hi Shahed",
       time: "8:00",
       icon: "person.svg",
       id: 3, status: '',
     ),
 
     ChatModel(
-      name: "Balram Rathore",
+      name: "Niloy",
       isGroup: false,
-      currentMessage: "Hi Dev Stack",
+      currentMessage: "Hi Faiyaz",
       time: "2:00",
       icon: "person.svg",
       id: 4, status: '',
     ),
 
     // ChatModel(
-    //   name: "NodeJs Group",
+    //   name: "Ramim",
     //   isGroup: true,
-    //   currentMessage: "New NodejS Post",
+    //   currentMessage: "New Post",
     //   time: "2:00",
     //   icon: "group.svg",
     // ),
@@ -60,51 +61,30 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: ListView.builder(
-      //     itemCount: chatmodels.length,
-      //     itemBuilder: (contex, index) => InkWell(
-      //           onTap: () {
-      //             print('chatmodels before ${chatmodels.length}');
-      //             // sourceChat = chatmodels.removeAt(index);
-      //             sourceChat = chatmodels.first;
-      //             print('chatmodels after ${chatmodels.length}');
-      //             print('Sourcechat ${sourceChat!.id}');
-      //             Navigator.pushReplacement(
-      //                 context,
-      //                 MaterialPageRoute(
-      //                     builder: (builder) => Homescreen(
-      //                           chatmodels: chatmodels,
-      //                           sourchat: sourceChat!,
-      //                         )));
-      //           },
-      //           // child: ButtonCard(
-      //           //   name: chatmodels[index].name,
-      //           //   icon: Icons.person,
-      //           // ),
-      //           child: Column(
-      //             children: const <Widget>[
-      //               Icon(Icons.person),
-      //               Text('Name'),
-      //             ],
-      //           ),
-      //         )),
-
-      body: Center(
-        child: TextButton(
-            onPressed: (){
-              sourceChat = chatmodels.removeAt(3);
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (builder) => Homescreen(
-                        chatmodels: chatmodels,
-                        sourchat: sourceChat!,
-                      )));
-            },
-            child: Text("Log In",
-            style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-        ),
-      ),
+      body: ListView.builder(
+          itemCount: chatmodels.length,
+          itemBuilder: (contex, index) => InkWell(
+                onTap: () {
+                  sourceChat = chatmodels.removeAt(index);
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => Homescreen(
+                                chatmodels: chatmodels,
+                                sourchat: sourceChat!,
+                              )));
+                },
+                child: ButtonCard(
+                  name: chatmodels[index].name,
+                  icon: Icons.person,
+                ),
+                // child: Column(
+                //   children: const <Widget>[
+                //     Icon(Icons.person),
+                //     Text('Name'),
+                //   ],
+                // ),
+              )),
     );
   }
 }

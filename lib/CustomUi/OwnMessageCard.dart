@@ -9,35 +9,46 @@ class OwnMessageCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      child: Card(
-        child: Stack(
-          children: [
-            Padding(
-                padding: EdgeInsets.only(
-                  left: 10,
-                  right: 30,
-                  top: 5,
-                  bottom: 20,
-                ),
-              child: Text(
-                message,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 4,
-                right: 10,
+      alignment: Alignment.centerRight,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: MediaQuery.of(context).size.width - 45,
+        ),
+        child: Card(
+          elevation: 1,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          margin: EdgeInsets.symmetric(horizontal: 15,  vertical: 5),
+          color: Color(0xffdcf8c6),
+
+          child: Stack(
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(
+                    left: 10,
+                    right: 30,
+                    top: 5,
+                    bottom: 20,
+                  ),
                 child: Text(
-                  time,
+                  message,
                   style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.grey[600],
+                    fontSize: 16,
                   ),
                 ),
-            )
-          ],
+              ),
+              Positioned(
+                bottom: 4,
+                  right: 10,
+                  child: Text(
+                    time,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+              )
+            ],
+          ),
         ),
       ),
     );
