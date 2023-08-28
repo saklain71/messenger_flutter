@@ -16,7 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
    ChatModel? sourceChat;
   List<ChatModel> chatmodels = [
     ChatModel(
-      name: "Rashed",
+      name: "Saklain",
       isGroup: false,
       currentMessage: "Hi Everyone",
       time: "4:00",
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
       id: 1, status: '',
     ),
     ChatModel(
-      name: "Shahed",
+      name: "Sami",
       isGroup: false,
       currentMessage: "Hi Rashed",
       time: "13:00",
