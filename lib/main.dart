@@ -5,8 +5,13 @@ import 'Screens/LoginScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  cameras = await availableCameras();
-  //final firstCamera = cameras.first;
+    cameras = await availableCameras();
+
+  // try {
+  //   cameras = await availableCameras();
+  // } on CameraException catch (e) {
+  //   print('Error: $e.code\nError Message: $e.message');
+  // }
   runApp(const MyApp());
 }
 
@@ -25,3 +30,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

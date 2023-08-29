@@ -1,5 +1,5 @@
-// import 'package:camera/camera.dart';
-// import 'package:chatapp/CustomUI/CameraUI.dart';
+
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:messenger_flutter/CustomUi/OwnMessageCard.dart';
@@ -21,9 +21,9 @@ class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   FocusNode focusNode = FocusNode();
   bool sendButton = false;
-  List<MessageModel> messages = [];
-  TextEditingController _controller = TextEditingController();
-  ScrollController _scrollController = ScrollController();
+  List<MessageModel>? messages = [];
+  final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   late IO.Socket socket;
   @override
   void initState() {
@@ -38,6 +38,7 @@ class _IndividualPageState extends State<IndividualPage> {
       }
     });
     connect();
+    print('trying to connect socket.io');
   }
 
   void connect() {
@@ -48,17 +49,15 @@ class _IndividualPageState extends State<IndividualPage> {
     });
     socket.connect();
     socket.emit("signin", widget.sourchat.id);
-    socket.emit("saklain", "Hello Saklain");
-    socket.onConnect((data) {
-      print("Connected");
-      socket.on("message", (msg) {
-        print(msg);
-        setMessage("destination", msg["message"]);
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-      });
+    socket.onConnect((data) {print("Connected");
+    socket.on("message", (msg) {
+      print(msg);
+      // setMessage("destination", msg["message"]);
+      // _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+      //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     });
-    print(socket.connected);
+    });
+    print('socket.connected ${socket.connected}');
   }
 
   void sendMessage(String message, int sourceId, int targetId) {
@@ -75,7 +74,7 @@ class _IndividualPageState extends State<IndividualPage> {
     print(messages);
 
     setState(() {
-      messages.add(messageModel);
+      messages!.add(messageModel);
     });
   }
 
@@ -94,6 +93,7 @@ class _IndividualPageState extends State<IndividualPage> {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(60),
             child: AppBar(
+              elevation: 0,
               leadingWidth: 70,
               titleSpacing: 0,
               leading: InkWell(
@@ -104,8 +104,9 @@ class _IndividualPageState extends State<IndividualPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.arrow_back,
-                      size: 24,
+                        Icons.arrow_back,
+                        size: 24,
+                        color: Colors.blueGrey
                     ),
                     CircleAvatar(
                       child: SvgPicture.asset(
@@ -134,13 +135,15 @@ class _IndividualPageState extends State<IndividualPage> {
                         widget.chatModel.name,
                         style: TextStyle(
                           fontSize: 18.5,
+                          color: Colors.blueGrey,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        "last seen today at 12:05",
+                        "last seen today at ${widget.chatModel.time}",
                         style: TextStyle(
-                          fontSize: 13,
+                            fontSize: 13,
+                            color: Colors.blueGrey
                         ),
                       )
                     ],
@@ -148,9 +151,14 @@ class _IndividualPageState extends State<IndividualPage> {
                 ),
               ),
               actions: [
-                IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
-                IconButton(icon: Icon(Icons.call), onPressed: () {}),
+                IconButton(icon: Icon(Icons.videocam),color: Colors.blueGrey, onPressed: () {
+                  print("BDCOM");
+                }),
+                IconButton(icon: Icon(Icons.call), color: Colors.blueGrey,onPressed: () {
+                  print("BDCOM");
+                }),
                 PopupMenuButton<String>(
+                  color: Colors.white,
                   padding: EdgeInsets.all(0),
                   onSelected: (value) {
                     print(value);
@@ -185,6 +193,7 @@ class _IndividualPageState extends State<IndividualPage> {
                   },
                 ),
               ],
+              backgroundColor: Colors.white70,
             ),
           ),
           body: Container(
@@ -198,22 +207,22 @@ class _IndividualPageState extends State<IndividualPage> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       controller: _scrollController,
-                      itemCount: messages.length + 1,
+                      itemCount: messages!.length + 1,
                       itemBuilder: (context, index) {
-                        if (index == messages.length) {
+                        if (index == messages!.length) {
                           return Container(
                             height: 70,
                           );
                         }
-                        if (messages[index].type == "source") {
+                        if (messages![index].type == "source") {
                           return OwnMessageCard(
-                            message: messages[index].message,
-                            time: messages[index].time,
+                            message: messages![index].message,
+                            time: messages![index].time,
                           );
                         } else {
                           return ReplyCard(
-                            message: messages[index].message,
-                            time: messages[index].time,
+                            message: messages![index].message,
+                            time: messages![index].time,
                           );
                         }
                       },
@@ -229,7 +238,7 @@ class _IndividualPageState extends State<IndividualPage> {
                           Row(
                             children: [
                               Container(
-                                width: MediaQuery.of(context).size.width - 55,
+                                width: MediaQuery.of(context).size.width - 60,
                                 child: Card(
                                   margin: EdgeInsets.only(
                                       left: 2, right: 2, bottom: 8),
@@ -241,7 +250,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                     focusNode: focusNode,
                                     textAlignVertical: TextAlignVertical.center,
                                     keyboardType: TextInputType.multiline,
-                                    maxLines: 5,
+                                    maxLines: 7,
                                     minLines: 1,
                                     onChanged: (value) {
                                       if (value.length > 0) {
@@ -309,7 +318,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                 padding: const EdgeInsets.only(
                                   bottom: 8,
                                   right: 2,
-                                  left: 2,
+                                  left: 4,
                                 ),
                                 child: CircleAvatar(
                                   radius: 25,
@@ -340,9 +349,10 @@ class _IndividualPageState extends State<IndividualPage> {
                                   ),
                                 ),
                               ),
+                              // emojiSelect(),
                             ],
                           ),
-                          show ? emojiSelect() : Container(),
+                          //show ? emojiSelect() : Container(),
                         ],
                       ),
                     ),
@@ -380,8 +390,13 @@ class _IndividualPageState extends State<IndividualPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(
-                      Icons.insert_drive_file, Colors.indigo, "Document"),
+                  InkWell(
+                    child: iconCreation(
+                        Icons.insert_drive_file, Colors.indigo, "Document"),
+                    onTap: (){
+                      print('Document');
+                    },
+                  ),
                   SizedBox(
                     width: 40,
                   ),
@@ -447,15 +462,18 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   Widget emojiSelect() {
-    // return EmojiPicker(
-    //     rows: 4,
-    //     columns: 7,
-    //     onEmojiSelected: (emoji, category) {
-    //       print(emoji);
-    //       setState(() {
-    //         _controller.text = _controller.text + emoji.emoji;
-    //       });
-    //     });
-    return Container();
+    return EmojiPicker(
+        config: Config(
+            columns: 7
+        ),
+        //rows: 4,
+        //columns: 7,
+        onEmojiSelected: (emoji, category) {
+          print(emoji);
+          setState(() {
+            _controller.text = _controller.text + emoji.toString();
+          });
+        });
+    //return Container();
   }
 }

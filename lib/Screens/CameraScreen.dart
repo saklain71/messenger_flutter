@@ -2,13 +2,18 @@ import 'dart:math';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart' show join;
+import 'package:messenger_flutter/Common/Coomon.dart';
+import 'package:messenger_flutter/Screens/CameraViewPage.dart';
+// import 'package:path/path.dart' show join;
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
-List<CameraDescription>? cameras;
+ List<CameraDescription>? cameras;
 
 class CameraScreen extends StatefulWidget {
   const CameraScreen({Key? key}) : super(key: key);
+
+  // final CameraDescription camera;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -19,6 +24,7 @@ class _CameraScreenState extends State<CameraScreen> {
   late Future<void> cameraValue;
   bool isRecording = false;
   bool flash = false;
+  //final cameras = Common.firstCamera;
 
   @override
   void initState() {
@@ -87,25 +93,43 @@ class _CameraScreenState extends State<CameraScreen> {
                           // });
                         },
                         onLongPressUp: () async{
-                          final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
-
-                          XFile videopath =  await _cameraController!.stopVideoRecording();
+                          // final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
+                          //
+                          // XFile videopath =  await _cameraController!.stopVideoRecording();
 
                           setState(() {
                             isRecording = false;
                           });
                           Navigator.push(context, MaterialPageRoute(
                               builder: (builder) =>
-                                Container()
+                                Container(color: Colors.red,)
                                 ));
                         },
                         onTap: () async {
-                          // if(!isRecording) takePhoto(context);
+                           //if(!isRecording) takePhoto(context);
+                           //final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
 
-                          final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
-                           XFile file =  await _cameraController!.takePicture();
-                          print('path $path');
-                          print('XFile $file');
+                          try {
+                            // Ensure that the camera is initialized.
+                            print('image');
+                            await cameraValue;
+
+                            // Attempt to take a picture and then get the location
+                            // where the image file is saved.
+                            final image = await _cameraController!.takePicture();
+                            print('image $image');
+                            _cameraController!.dispose();
+                          } catch (e) {
+                            // If an error occurs, log the error to the console.
+                            print("error $e");
+                          }
+
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (builder) => CameraViewPage(
+                          //           path: path,
+                          //         )));
                         },
                         child: isRecording
                             ? Icon(
@@ -148,9 +172,10 @@ class _CameraScreenState extends State<CameraScreen> {
     );
   }
   void takePhoto(BuildContext context) async {
-    final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
-    print('path $path');
-     await _cameraController!.takePicture();
+    // final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
+
+     XFile path = await _cameraController!.takePicture();
+     print('path $path');
 
     // Navigator.push(
     //     context,
@@ -159,4 +184,23 @@ class _CameraScreenState extends State<CameraScreen> {
     //           path: file.path,
     //         )));
   }
+  void _onCapturePressed(context) async {
+    try {
+      final path =
+      join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
+      await _cameraController!.takePicture();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CameraViewPage(
+              path: path,
+            )),
+      );
+    } catch (e) {
+      //_showCameraException(e);
+    }
+  }
+
+
 }
