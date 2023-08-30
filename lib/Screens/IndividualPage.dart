@@ -7,6 +7,7 @@ import 'package:messenger_flutter/CustomUi/ReplyCard.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
 import 'package:messenger_flutter/Model/MessageModel.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart';
 
 class IndividualPage extends StatefulWidget {
   IndividualPage({Key? key, required this.chatModel, required this.sourchat}) : super(key: key);
@@ -28,7 +29,7 @@ class _IndividualPageState extends State<IndividualPage> {
   @override
   void initState() {
     super.initState();
-    // connect();
+     connect();
 
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -37,28 +38,48 @@ class _IndividualPageState extends State<IndividualPage> {
         });
       }
     });
-    connect();
+    // connect();
+  }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    socket.disconnect();
+    socket.dispose();
   }
 
-  void connect() {
+    void connect() {
+     // print('socket.connected ${socket}');
+
     // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
-    socket = IO.io("http://210.4.64.216:5000", <String, dynamic>{
+       socket = IO.io("http://localhost:5000", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
     });
+    //   socket = IO.io('http://localhost:5000',
+    //       OptionBuilder()
+    //           .setTransports(['websocket']) // for Flutter or Dart VM
+    //           .disableAutoConnect()  // disable auto-connection
+    //           .setExtraHeaders({'foo': 'bar'}) // optional
+    //           .build()
+    //   );
+      socket.connect();
     socket.connect();
-    socket.emit("signin", widget.sourchat.id);
-    socket.emit("saklain", "Hello Saklain");
-    socket.onConnect((data) {
-      print("Connected");
-      socket.on("message", (msg) {
-        print(msg);
-        setMessage("destination", msg["message"]);
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-      });
+    // socket.emit("/signin", widget.sourchat.id);
+    socket.emit("/saklain", "Hello Saklain");
+    socket.onConnect((data) => {
+      print("Connected data")
     });
-    print(socket.connected);
+
+      // socket.on("message", (msg) {
+      //   print(msg);
+      //   setMessage("destination", msg["message"]);
+      //   _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+      //       duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+      // });
+    // });
+    print("socket connected ${socket.connected}");
+
   }
 
   void sendMessage(String message, int sourceId, int targetId) {
