@@ -23,8 +23,9 @@ class _IndividualPageState extends State<IndividualPage> {
   bool sendButton = false;
   List<MessageModel> messages = [];
   TextEditingController _controller = TextEditingController();
-  ScrollController _scrollController = ScrollController();
+  ScrollController _scrollController = ScrollController(initialScrollOffset: 50.0);
   late IO.Socket socket;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +40,7 @@ class _IndividualPageState extends State<IndividualPage> {
     });
     connect();
   }
+
 
   void connect() {
     // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
@@ -62,8 +64,8 @@ class _IndividualPageState extends State<IndividualPage> {
     // });
     print(socket.connected);
     socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print(err));
-    socket.onError((err) => print(err));
+    socket.onConnectError((err) => print("onConnectError $err"));
+    socket.onError((err) => print("onError $err"));
     print(socket.disconnected);
   }
 
@@ -80,9 +82,9 @@ class _IndividualPageState extends State<IndividualPage> {
         time: DateTime.now().toString().substring(10, 16));
     print("message $messages");
 
-    setState(() {
+    //setState(() {
       messages.add(messageModel);
-    });
+    //});
     print("message $messages");
   }
 
@@ -338,7 +340,7 @@ class _IndividualPageState extends State<IndividualPage> {
                                             _controller.text,
                                             widget.sourchat.id,
                                             widget.chatModel.id);
-                                        _controller.clear();
+                                           _controller.clear();
                                         setState(() {
                                           sendButton = false;
                                         });
