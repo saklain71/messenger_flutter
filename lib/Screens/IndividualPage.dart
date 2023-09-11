@@ -23,14 +23,14 @@ class _IndividualPageState extends State<IndividualPage> {
   bool sendButton = false;
   List<MessageModel> messages = [];
   TextEditingController _controller = TextEditingController();
-  ScrollController _scrollController = ScrollController(initialScrollOffset: 50.0);
+  ScrollController _scrollController = ScrollController();
   late IO.Socket socket;
 
   @override
   void initState() {
     super.initState();
     // connect();
-
+    _scrollController = ScrollController();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -67,6 +67,7 @@ class _IndividualPageState extends State<IndividualPage> {
     socket.onConnectError((err) => print("onConnectError $err"));
     socket.onError((err) => print("onError $err"));
     print(socket.disconnected);
+
   }
 
   void sendMessage(String message, int sourceId, int targetId) {
@@ -82,9 +83,14 @@ class _IndividualPageState extends State<IndividualPage> {
         time: DateTime.now().toString().substring(10, 16));
     print("message $messages");
 
-    //setState(() {
-      messages.add(messageModel);
-    //});
+    if (this.mounted) {
+      setState(() {
+        messages.add(messageModel);
+      });
+    }
+    // setState(() {
+    //   messages.add(messageModel);
+    // });
     print("message $messages");
   }
 
@@ -112,6 +118,7 @@ class _IndividualPageState extends State<IndividualPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+
                     Icon(
                       Icons.arrow_back,
                       size: 24,
@@ -157,7 +164,15 @@ class _IndividualPageState extends State<IndividualPage> {
                 ),
               ),
               actions: [
-                IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
+                // IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
+
+                Center(child:
+                Text(socket.connected.toString(),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 25,
+                      color: socket.connected ? Colors.blueGrey : Colors.red,
+                  ))),
                 IconButton(icon: Icon(Icons.call), onPressed: () {}),
                 PopupMenuButton<String>(
                   padding: EdgeInsets.all(0),
