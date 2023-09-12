@@ -48,34 +48,46 @@ class _StatusPageState extends State<StatusPage> {
           Level("Recent Updates"),
           OthersStatus(
               name : "Sami",
-              imageName: "assets/3.jpg",
-              time : "12:00 am"
+              imageName: "assets/1.jpg",
+              time : "12:00 am",
+              isSeen: false,
+              statusNum: 1,
           ),
           OthersStatus(
               name : "Foisal",
               imageName: "assets/3.jpg",
-              time : "12:00 am"
+              time : "12:00 am",
+              isSeen: false,
+               statusNum: 2,
           ),
           OthersStatus(
               name : "Nabil",
-              imageName: "assets/3.jpg",
-              time : "12:00 am"
+              imageName: "assets/1.jpg",
+              time : "12:00 am",
+              isSeen: false,
+              statusNum: 3,
           ),
           Level("Viewd Updates"),
           OthersStatus(
               name : "Sami",
               imageName: "assets/3.jpg",
-              time : "12:00 am"
+              time : "12:00 am",
+              isSeen: true,
+              statusNum: 1,
           ),
           OthersStatus(
               name : "Sami",
               imageName: "assets/3.jpg",
-              time : "12:00 am"
+              time : "12:00 am",
+              isSeen: true,
+              statusNum: 2,
           ),
           OthersStatus(
               name : "Sami",
               imageName: "assets/3.jpg",
-              time : "12:00 am"
+              time : "12:00 am",
+              isSeen: true,
+              statusNum: 10,
           ),
 
         ],

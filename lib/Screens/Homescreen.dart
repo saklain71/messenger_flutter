@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
+import 'package:messenger_flutter/NewScreen/LandingScreen.dart';
 import 'package:messenger_flutter/Pages/CameraPage.dart';
 import 'package:messenger_flutter/Pages/ChatPage.dart';
 import 'package:messenger_flutter/Pages/StatusPage.dart';
@@ -73,8 +74,8 @@ class _HomescreenState extends State<Homescreen>
               text: "STATUS",
             ),
             Tab(
-              text: "CALLS",
-            )
+              text: "Land",
+            ),
           ],
         ),
       ),
@@ -87,7 +88,7 @@ class _HomescreenState extends State<Homescreen>
             sourchat: widget.sourchat,
           ),
           StatusPage(),
-          Text("Calls"),
+          LandingScreen()
         ],
       ),
     );
