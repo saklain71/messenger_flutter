@@ -2,10 +2,14 @@
 // import 'package:chatapp/CustomUI/CameraUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:messenger_flutter/CustomUi/OwnFileCard.dart';
 import 'package:messenger_flutter/CustomUi/OwnMessageCard.dart';
 import 'package:messenger_flutter/CustomUi/ReplyCard.dart';
+import 'package:messenger_flutter/CustomUi/ReplyFileCard.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
 import 'package:messenger_flutter/Model/MessageModel.dart';
+import 'package:messenger_flutter/Screens/CameraViewPage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
@@ -25,6 +29,8 @@ class _IndividualPageState extends State<IndividualPage> {
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
   late IO.Socket socket;
+  ImagePicker picker = ImagePicker();
+  XFile? file;
 
   @override
   void initState() {
@@ -218,7 +224,7 @@ class _IndividualPageState extends State<IndividualPage> {
               child: Column(
                 children: [
                   Expanded(
-                    // height: MediaQuery.of(context).size.height - 150,
+                    //height: MediaQuery.of(context).size.height - 150,
                     child: ListView.builder(
                       shrinkWrap: true,
                       controller: _scrollController,
@@ -405,15 +411,24 @@ class _IndividualPageState extends State<IndividualPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   iconCreation(
-                      Icons.insert_drive_file, Colors.indigo, "Document"),
+                      Icons.insert_drive_file, Colors.indigo, "Document", (){}),
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.camera_alt, Colors.pink, "Camera"),
+                  iconCreation(Icons.camera_alt, Colors.pink, "Camera", (){}),
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery"),
+                  iconCreation(Icons.insert_photo, Colors.purple, "Gallery",
+                          ()async{
+                     file = await picker.pickImage(source: ImageSource.gallery);
+                     Navigator.push(context,
+                     MaterialPageRoute(builder: (context)=> CameraViewPage(
+                         path: file!.path,
+                              ),
+                            ),
+                     );
+                  })
                 ],
               ),
               SizedBox(
@@ -422,15 +437,15 @@ class _IndividualPageState extends State<IndividualPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(Icons.headset, Colors.orange, "Audio"),
+                  iconCreation(Icons.headset, Colors.orange, "Audio", (){}),
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.location_pin, Colors.teal, "Location"),
+                  iconCreation(Icons.location_pin, Colors.teal, "Location", (){}),
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.person, Colors.blue, "Contact"),
+                  iconCreation(Icons.person, Colors.blue, "Contact", (){}),
                 ],
               ),
             ],
@@ -440,9 +455,9 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
-  Widget iconCreation(IconData icons, Color color, String text) {
+  Widget iconCreation(IconData icons, Color color, String text, Function onTap) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap(),
       child: Column(
         children: [
           CircleAvatar(

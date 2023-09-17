@@ -1,17 +1,14 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:messenger_flutter/Common/Coomon.dart';
 import 'Screens/CameraScreen.dart';
 import 'Screens/LoginScreen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-    cameras = await availableCameras();
+   cameras = await availableCameras();
+  //ApiCommon.firstCamera = cameras.first;
 
-  // try {
-  //   cameras = await availableCameras();
-  // } on CameraException catch (e) {
-  //   print('Error: $e.code\nError Message: $e.message');
-  // }
   runApp(const MyApp());
 }
 

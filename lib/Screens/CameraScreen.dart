@@ -1,13 +1,12 @@
-import 'dart:math';
 
+import 'dart:convert';
+import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:messenger_flutter/Common/Coomon.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:messenger_flutter/Screens/CameraViewPage.dart';
-// import 'package:path/path.dart' show join;
-import 'package:path/path.dart';
+import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
-
 import 'VideoView.dart';
 
  List<CameraDescription>? cameras;
@@ -22,15 +21,26 @@ class CameraScreen extends StatefulWidget {
 }
 
 class _CameraScreenState extends State<CameraScreen> {
-  CameraController? _cameraController;
-  late Future<void> cameraValue;
+  // CameraController? _cameraController;
+  // Future<void>? cameraValue;
+
+  CameraController? _controller;
+  Future<void>? _initializeControllerFuture;
+
   bool isRecording = false;
   bool flash = false;
   bool iscamerafront = true;
   double transform = 0;
+  //final CameraDescription camera = ApiCommon.firstCamera;
+
+  // late XFile pictureFile;
+  // late XFile imagePick;
+  //
+  // ImagePicker image = ImagePicker();
 
   //final cameras = Common.firstCamera;
-  late List<CameraDescription> _cameras;
+  // late List<CameraDescription> _cameras;
+
 
   @override
   void initState() {
@@ -41,18 +51,51 @@ class _CameraScreenState extends State<CameraScreen> {
     _initCamera();
   }
   void _initCamera() async {
-    _cameras = await availableCameras();
-    _cameraController = CameraController(_cameras[0], ResolutionPreset.medium);
-    cameraValue =  _cameraController!.initialize();
+    _controller = CameraController(
+      // Get a specific camera from the list of available cameras.
+      cameras![0],
+      // Define the resolution to use.
+      ResolutionPreset.medium,
+    );
+    _initializeControllerFuture = _controller!.initialize();
 
-    if (mounted) {
-      setState(() {});
-    }
+    //_cameras = await availableCameras();
+    //_cameraController = CameraController(cameras![0], ResolutionPreset.medium);
+    //cameraValue =  _cameraController!.initialize();
+    // cameraValue = _cameraController!.initialize().then((_) {
+    //   if (!mounted) {
+    //     return;
+    //   }
+    //   setState(() {});
+    // });
+  }
+
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
+  XFile? pickimage;
+  String? loadImage;
+
+  /// image picker function
+  Future CameraImage() async{
+    var photo = await _picker.pickImage(
+      source: ImageSource.camera,
+      maxHeight: 1500,
+      maxWidth: 1500,
+    );
+    setState(() {
+      _image = File(photo!.path);
+    });
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => CameraViewPage(
+              path: _image.toString(),
+            )));
   }
 
   @override
   void dispose() {
-    _cameraController!.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
@@ -61,16 +104,16 @@ class _CameraScreenState extends State<CameraScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          FutureBuilder(
-              future: cameraValue,
+          FutureBuilder<void>(
+              future: _initializeControllerFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   return Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
-                      child: CameraPreview(_cameraController!));
+                      child: CameraPreview(_controller!));
                 } else {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
@@ -98,13 +141,13 @@ class _CameraScreenState extends State<CameraScreen> {
                               flash = !flash;
                             });
                             flash
-                                ? _cameraController!
+                                ? _controller!
                                 .setFlashMode(FlashMode.torch)
-                                : _cameraController!.setFlashMode(FlashMode.off);
+                                : _controller!.setFlashMode(FlashMode.off);
                           }),
                       GestureDetector(
                         onLongPress: () async{
-                          await _cameraController!.startVideoRecording();
+                          await _controller!.startVideoRecording();
                           setState(() {
                             isRecording = true;
                           });
@@ -115,7 +158,7 @@ class _CameraScreenState extends State<CameraScreen> {
                           // XFile videopath =  await _cameraController!.stopVideoRecording();
 
                           XFile videopath =
-                          await _cameraController!.stopVideoRecording();
+                          await _controller!.stopVideoRecording();
 
                           setState(() {
                             isRecording = false;
@@ -129,16 +172,32 @@ class _CameraScreenState extends State<CameraScreen> {
                         },
                         onTap: () async {
                           print("path empty");
-                           if(!isRecording) takePhoto(context);
+                           //if(!isRecording) takePhoto(context);
+                          CameraImage();
+                           // Navigator.push(
+                           //          context,
+                           //          MaterialPageRoute(
+                           //              builder: (builder) => CameraViewPage(
+                           //                path: imagePick.toString(),
+                           //              )));
 
-                           //final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
 
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (builder) => CameraViewPage(
-                          //           path: path,
-                          //         )));
+                          //   await _initializeControllerFuture;
+                          //   final image = await _controller!.takePicture();
+                          //   if (!mounted) return;
+                          //   print('image $image');
+                          //    await Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (builder) => CameraViewPage(
+                          //             path: image.path,
+                          //           )));
+                          // } catch (e) {
+                          //   // If an error occurs, log the error to the console.
+                          //   print("flutt $e");
+                          // }
+
+
                         },
                         child: isRecording
                             ? Icon(
@@ -176,32 +235,47 @@ class _CameraScreenState extends State<CameraScreen> {
 
             ),
           ),
+          // if (pictureFile != null)
+          //   Image.network(
+          //     pictureFile!.path,
+          //     height: 200,
+          //   )
         ],
       ),
     );
   }
   void takePhoto(BuildContext context) async {
+    final picker = ImagePicker();
     print("path from takephoto");
-     String path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
-      //String? path;
-      XFile file = await _cameraController!.takePicture();
-     // file.saveTo(path!);
-     print('path last $path');
-     print('path file $file');
+     // final path = join((await getTemporaryDirectory()).path,"${DateTime.now()}.png");
+
+    final patH = join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
+    // pictureFile = patH as XFile?;
+
+    try {
+        await _controller!.takePicture();
+    } catch (e) {
+      print("Error taking picture: $e");
+    }
 
 
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (builder) => CameraViewPage(
-    //           path: file.path,
-    //         )));
+    // file.saveTo(path!);
+    setState(() {});
+    //print('path file $patH');
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (builder) => CameraViewPage(
+              path: patH,
+            )));
   }
+
   void _onCapturePressed(context) async {
     try {
       final path =
       join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
-      await _cameraController!.takePicture();
+      await _controller!.takePicture();
 
       Navigator.push(
         context,
