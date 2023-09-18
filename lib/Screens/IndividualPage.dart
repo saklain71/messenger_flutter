@@ -1,5 +1,7 @@
 // import 'package:camera/camera.dart';
 // import 'package:chatapp/CustomUI/CameraUI.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,8 +11,10 @@ import 'package:messenger_flutter/CustomUi/ReplyCard.dart';
 import 'package:messenger_flutter/CustomUi/ReplyFileCard.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
 import 'package:messenger_flutter/Model/MessageModel.dart';
+import 'package:messenger_flutter/Screens/CameraScreen.dart';
 import 'package:messenger_flutter/Screens/CameraViewPage.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:http/http.dart' as http;
 
 class IndividualPage extends StatefulWidget {
   IndividualPage({Key? key, required this.chatModel, required this.sourchat}) : super(key: key);
@@ -31,6 +35,7 @@ class _IndividualPageState extends State<IndividualPage> {
   late IO.Socket socket;
   ImagePicker picker = ImagePicker();
   XFile? file;
+  int popTime = 0;
 
   @override
   void initState() {
@@ -60,7 +65,10 @@ class _IndividualPageState extends State<IndividualPage> {
       print("Connected");
       socket.on("message", (msg) {
         print("msg $msg");
-        setMessage("destination", msg["message"]);
+        setMessage("destination",
+          msg["message"],
+          msg["path"],
+        );
         _scrollController.animateTo(_scrollController.position.maxScrollExtent,
             duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
@@ -76,17 +84,22 @@ class _IndividualPageState extends State<IndividualPage> {
 
   }
 
-  void sendMessage(String message, int sourceId, int targetId) {
-    setMessage("source", message);
+  void sendMessage(String message, int sourceId, int targetId, String path) {
+    setMessage("source", message, path);
     socket.emit("message",
-        {"message": message, "sourceId": sourceId, "targetId": targetId});
+        {"message": message,
+          "sourceId": sourceId,
+          "targetId": targetId,
+          "path": path
+        });
   }
 
-  void setMessage(String type, String message) {
+  void setMessage(String type, String message, String path) {
     MessageModel messageModel = MessageModel(
         type: type,
         message: message,
-        time: DateTime.now().toString().substring(10, 16));
+        time: DateTime.now().toString().substring(10, 16),
+        path: path);
     print("message $messages");
 
     if (this.mounted) {
@@ -98,6 +111,34 @@ class _IndividualPageState extends State<IndividualPage> {
     //   messages.add(messageModel);
     // });
     print("message $messages");
+  }
+
+  void onImageSend(String path, String message)async{
+    print("hey there working $message $path");
+    for(int i = 0; i < popTime; i++){
+      Navigator.pop(context);
+    }
+    setState(() {
+      popTime = 0;
+    });
+    var request = http.MultipartRequest(
+      "POST", Uri.parse("http://210.4.64.216:3000/routes/addimage"));
+    request.files.add(await http.MultipartFile.fromPath("img", path));
+    request.headers.addAll({
+      "Content-type":"multipart/form-date",
+    });
+    http.StreamedResponse response = await request.send();
+    var httpResponse = await http.Response.fromStream(response);
+    var data = json.decode(httpResponse.body);
+    print(data['path']);
+    print("response ${response.statusCode}");
+    setMessage("source", message, path);
+    socket.emit("message",
+        {"message": message,
+          "sourceId": widget.sourchat.id,
+          "targetId": widget.chatModel.id,
+          "path": path
+        });
   }
 
   @override
@@ -321,11 +362,16 @@ class _IndividualPageState extends State<IndividualPage> {
                                           IconButton(
                                             icon: Icon(Icons.camera_alt),
                                             onPressed: () {
-                                              // Navigator.push(
-                                              //     context,
-                                              //     MaterialPageRoute(
-                                              //         builder: (builder) =>
-                                              //             CameraApp()));
+                                              setState(() {
+                                                popTime = 2;
+                                              });
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (builder) =>
+                                                          CameraScreen(
+                                                              onImageSend: onImageSend,
+                                                          )));
                                             },
                                           ),
                                         ],
@@ -360,7 +406,9 @@ class _IndividualPageState extends State<IndividualPage> {
                                         sendMessage(
                                             _controller.text,
                                             widget.sourchat.id,
-                                            widget.chatModel.id);
+                                            widget.chatModel.id,
+                                            ""
+                                        );
                                            _controller.clear();
                                         setState(() {
                                           sendButton = false;
@@ -415,19 +463,30 @@ class _IndividualPageState extends State<IndividualPage> {
                   SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.camera_alt, Colors.pink, "Camera", (){}),
+                  iconCreation(Icons.camera_alt, Colors.pink, "Camera", (){
+                    // setState(() {
+                    //   popTime = 3;
+                    // });
+                    // Navigator.push(context,
+                    // MaterialPageRoute(builder: (context)=> CameraScreen(
+                    //     onImageSend: onImageSend)));
+                  }),
                   SizedBox(
                     width: 40,
                   ),
                   iconCreation(Icons.insert_photo, Colors.purple, "Gallery",
                           ()async{
-                     file = await picker.pickImage(source: ImageSource.gallery);
-                     Navigator.push(context,
-                     MaterialPageRoute(builder: (context)=> CameraViewPage(
-                         path: file!.path,
-                              ),
-                            ),
-                     );
+                    // setState(() {
+                    //   popTime = 2;
+                    // });
+                    //  file = await picker.pickImage(source: ImageSource.gallery);
+                    //  Navigator.push(context,
+                    //  MaterialPageRoute(builder: (context)=> CameraViewPage(
+                    //      path: file!.path,
+                    //      onImageSend: onImageSend,
+                    //           ),
+                    //         ),
+                    //  );
                   })
                 ],
               ),

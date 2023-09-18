@@ -82,7 +82,7 @@ class _HomescreenState extends State<Homescreen>
       body: TabBarView(
         controller: _controller,
         children: [
-          CameraPage(),
+          Text("Camera"),
           ChatPage(
             chatmodels: widget.chatmodels,
             sourchat: widget.sourchat,

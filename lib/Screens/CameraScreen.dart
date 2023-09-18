@@ -12,7 +12,8 @@ import 'VideoView.dart';
  List<CameraDescription>? cameras;
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({Key? key}) : super(key: key);
+  const CameraScreen({Key? key, required this.onImageSend}) : super(key: key);
+  final Function onImageSend;
 
   // final CameraDescription camera;
 
@@ -90,6 +91,7 @@ class _CameraScreenState extends State<CameraScreen> {
         MaterialPageRoute(
             builder: (builder) => CameraViewPage(
               path: _image.toString(),
+              onImageSend: widget.onImageSend,
             )));
   }
 
@@ -268,26 +270,27 @@ class _CameraScreenState extends State<CameraScreen> {
         MaterialPageRoute(
             builder: (builder) => CameraViewPage(
               path: patH,
+              onImageSend: widget.onImageSend,
             )));
   }
 
-  void _onCapturePressed(context) async {
-    try {
-      final path =
-      join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
-      await _controller!.takePicture();
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => CameraViewPage(
-              path: path,
-            )),
-      );
-    } catch (e) {
-      //_showCameraException(e);
-    }
-  }
+  // void _onCapturePressed(context) async {
+  //   try {
+  //     final path =
+  //     join((await getTemporaryDirectory()).path, '${DateTime.now()}.png');
+  //     await _controller!.takePicture();
+  //
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => CameraViewPage(
+  //             path: path,
+  //           )),
+  //     );
+  //   } catch (e) {
+  //     //_showCameraException(e);
+  //   }
+  // }
 
 
 }
