@@ -277,10 +277,18 @@ class _IndividualPageState extends State<IndividualPage> {
                           );
                         }
                         if (messages[index].type == "source") {
-                          return OwnMessageCard(
-                            message: messages[index].message,
-                            time: messages[index].time,
-                          );
+                          if(messages[index].path != null){
+                            return OwnFileCard(
+                                path: messages[index].path,
+                                message: messages[index].message,
+                                time : messages[index].time
+                            );
+                          }else{
+                            return OwnMessageCard(
+                              message: messages[index].message,
+                              time: messages[index].time,
+                            );
+                          }
                         } else {
                           return ReplyCard(
                             message: messages[index].message,
@@ -464,29 +472,29 @@ class _IndividualPageState extends State<IndividualPage> {
                     width: 40,
                   ),
                   iconCreation(Icons.camera_alt, Colors.pink, "Camera", (){
-                    // setState(() {
-                    //   popTime = 3;
-                    // });
-                    // Navigator.push(context,
-                    // MaterialPageRoute(builder: (context)=> CameraScreen(
-                    //     onImageSend: onImageSend)));
+                    setState(() {
+                      popTime = 3;
+                    });
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context)=> CameraScreen(
+                        onImageSend: onImageSend)));
                   }),
                   SizedBox(
                     width: 40,
                   ),
                   iconCreation(Icons.insert_photo, Colors.purple, "Gallery",
                           ()async{
-                    // setState(() {
-                    //   popTime = 2;
-                    // });
-                    //  file = await picker.pickImage(source: ImageSource.gallery);
-                    //  Navigator.push(context,
-                    //  MaterialPageRoute(builder: (context)=> CameraViewPage(
-                    //      path: file!.path,
-                    //      onImageSend: onImageSend,
-                    //           ),
-                    //         ),
-                    //  );
+                    setState(() {
+                      popTime = 2;
+                    });
+                     file = await picker.pickImage(source: ImageSource.gallery);
+                     Navigator.push(context,
+                     MaterialPageRoute(builder: (context)=> CameraViewPage(
+                         path: file!.path,
+                         onImageSend: onImageSend,
+                              ),
+                            ),
+                     );
                   })
                 ],
               ),
@@ -514,9 +522,9 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
-  Widget iconCreation(IconData icons, Color color, String text, Function onTap) {
+  Widget iconCreation(IconData icons, Color color, String text, VoidCallback onTap) {
     return InkWell(
-      onTap: onTap(),
+      onTap: onTap,
       child: Column(
         children: [
           CircleAvatar(
