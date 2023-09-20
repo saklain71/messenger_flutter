@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:messenger_flutter/Common/Coomon.dart';
 import 'Screens/CameraScreen.dart';
 import 'Screens/LoginScreen.dart';
+import 'TestingFiles/home_to_group_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
           fontFamily: "OpenSans",
           primaryColor: Color(0xFF075E54),
           hintColor: Color(0xFF128C7E)),
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: const HomeToGroup(),
     );
   }
 }
