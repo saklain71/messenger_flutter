@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:messenger_flutter/Pages/group_page.dart';
+import 'package:messenger_flutter/Group/group_page.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeToGroup extends StatefulWidget {
-  const HomeToGroup({Key? key}) : super(key: key);
-
+  const HomeToGroup({Key? key,}) : super(key: key);
   @override
   State<HomeToGroup> createState() => _HomeToGroupState();
 }
@@ -11,6 +11,9 @@ class HomeToGroup extends StatefulWidget {
 class _HomeToGroupState extends State<HomeToGroup> {
   TextEditingController nameController = TextEditingController();
   final formkey = GlobalKey<FormState>();
+  var uuid = const Uuid();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,12 +58,14 @@ class _HomeToGroupState extends State<HomeToGroup> {
                       onPressed: (){
                         print(nameController.text.toString());
                         if(formkey.currentState!.validate()){
+                          String name = nameController.text;
                           nameController.clear();
                           Navigator.pop(context);
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context)=> GroupPage(
-                                  name: nameController.text
+                                  name: name,
+                                  userId : uuid.v1()
                               ))
                           );
                         }

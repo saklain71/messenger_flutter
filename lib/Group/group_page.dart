@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:messenger_flutter/Model/MessageModel.dart';
+import 'package:messenger_flutter/Group/grp_msg_model.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
+import 'other_msg_widget.dart';
+import 'own_msg_widget.dart';
+
 class GroupPage extends StatefulWidget {
-  const GroupPage({Key? key, required this.name}) : super(key: key);
+  const GroupPage({Key? key, required this.name, required this.userId}) : super(key: key);
   final String name;
+  final String userId;
 
   @override
   State<GroupPage> createState() => _GroupPageState();
@@ -14,9 +18,10 @@ class _GroupPageState extends State<GroupPage> {
   bool show = false;
   FocusNode focusNode = FocusNode();
   bool sendButton = false;
-  List<MessageModel> messages = [];
   IO.Socket? socket;
-  TextEditingController _controller = TextEditingController();
+  List<MsgModel> listMsg = [];
+
+  TextEditingController _msgController = TextEditingController();
   ScrollController _scrollController = ScrollController();
 
   void connect() {
@@ -29,22 +34,54 @@ class _GroupPageState extends State<GroupPage> {
     //socket.emit("signin", widget.sourchat.id);
     socket!.onConnect((data) {
       print("Connected");
+      //socket!.emit('sendMsg', 'test emit event');
+      socket!.on('sendMsgServer', (msgServer){
+        print('msg from server $msgServer');
+        if(msgServer["userId"] != widget.userId){
+          setState(() {
+            listMsg.add(
+                MsgModel(
+                    type: msgServer['type'],
+                    msg: msgServer['msg'],
+                    sender: msgServer['senderName']
+                )
+            );
+          });
+        }
+      });
       socket!.on("message", (msg) {
         print("msg $msg");
-        socket!.emit('msg', 'test');
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+        // _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     });
-    // socket.on("message", (data) {
-    //   print("message from server $data");
-    // });
+
     print(socket!.connected);
     socket!.onDisconnect((_) => print('Connection Disconnection'));
     socket!.onConnectError((err) => print("onConnectError $err"));
     socket!.onError((err) => print("onError $err"));
     print(socket!.disconnected);
 
+  }
+
+  void sendMesg(String msg, String senderName) {
+    // setMessage("source", message, path);
+    MsgModel ownMsg = MsgModel(
+        type: "ownMsg",
+        msg: msg,
+        sender: senderName
+    );
+    listMsg.add(ownMsg);
+    setState(() {
+      listMsg;
+    });
+    socket!.emit('sendMsg',
+        {
+          'type': 'ownMsg',
+          'msg': msg,
+          'senderName': senderName,
+          "userId": widget.userId
+        });
   }
 
   @override
@@ -70,7 +107,22 @@ class _GroupPageState extends State<GroupPage> {
       body: Column(
         children: [
           Expanded(
-              child: Container()
+              child: ListView.builder(
+                itemCount: listMsg.length,
+                  itemBuilder: (context, index){
+                    if(listMsg[index].type == "ownMsg"){
+                      return OwnMsgWidget(
+                          sender: listMsg[index].sender,
+                          msg: listMsg[index].msg
+                      );
+                    }else{
+                      return OtherMsgWidget(
+                          sender: listMsg[index].sender,
+                          msg: listMsg[index].msg
+                      );
+                    }
+                  }
+              )
           ),
           Align(
             alignment: Alignment.bottomCenter,
@@ -90,7 +142,7 @@ class _GroupPageState extends State<GroupPage> {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: TextFormField(
-                            controller: _controller,
+                            controller: _msgController,
                             focusNode: focusNode,
                             textAlignVertical: TextAlignVertical.center,
                             keyboardType: TextInputType.multiline,
@@ -127,37 +179,6 @@ class _GroupPageState extends State<GroupPage> {
                                   });
                                 },
                               ),
-                              // suffixIcon: Row(
-                              //   mainAxisSize: MainAxisSize.min,
-                              //   children: [
-                              //     IconButton(
-                              //       icon: Icon(Icons.attach_file),
-                              //       onPressed: () {
-                              //         showModalBottomSheet(
-                              //             backgroundColor:
-                              //             Colors.transparent,
-                              //             context: context,
-                              //             builder: (builder) =>
-                              //                 bottomSheet());
-                              //       },
-                              //     ),
-                              //     IconButton(
-                              //       icon: Icon(Icons.camera_alt),
-                              //       onPressed: () {
-                              //         setState(() {
-                              //           popTime = 2;
-                              //         });
-                              //         Navigator.push(
-                              //             context,
-                              //             MaterialPageRoute(
-                              //                 builder: (builder) =>
-                              //                     CameraScreen(
-                              //                       onImageSend: onImageSend,
-                              //                     )));
-                              //       },
-                              //     ),
-                              //   ],
-                              // ),
                               contentPadding: EdgeInsets.all(5),
                             ),
                           ),
@@ -178,20 +199,15 @@ class _GroupPageState extends State<GroupPage> {
                               color: Colors.white,
                             ),
                             onPressed: () {
+                              String msg = _msgController.text;
                               if (sendButton) {
-                                // _scrollController.animateTo(
-                                //     _scrollController
-                                //         .position.maxScrollExtent,
-                                //     duration:
-                                //     Duration(milliseconds: 300),
-                                //     curve: Curves.easeOut);
-                                // sendMessage(
-                                //     _controller.text,
-                                //     widget.sourchat.id,
-                                //     widget.chatModel.id,
-                                //     ""
-                                // );
-                                _controller.clear();
+                                if(msg.isNotEmpty){
+                                  sendMesg(
+                                      _msgController.text,
+                                      widget.name
+                                  );
+                                }
+                                _msgController.clear();
                                 setState(() {
                                   sendButton = false;
                                 });
