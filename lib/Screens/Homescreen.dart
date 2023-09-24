@@ -27,9 +27,9 @@ class _HomescreenState extends State<Homescreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Let's Chat"),
+        title: const Text("Let's Chat"),
         actions: [
-          IconButton(icon: Icon(Icons.search), onPressed: () {}),
+          IconButton(icon: const Icon(Icons.search), onPressed: () {}),
           PopupMenuButton<String>(
             onSelected: (value) {
               print(value);
@@ -63,7 +63,7 @@ class _HomescreenState extends State<Homescreen>
         bottom: TabBar(
           controller: _controller,
           indicatorColor: Colors.white,
-          tabs: [
+          tabs: const [
             Tab(
               icon: Icon(Icons.camera_alt),
             ),
@@ -82,13 +82,13 @@ class _HomescreenState extends State<Homescreen>
       body: TabBarView(
         controller: _controller,
         children: [
-          Text("Camera"),
+          const Text("Camera"),
           ChatPage(
             chatmodels: widget.chatmodels,
             sourchat: widget.sourchat,
           ),
-          StatusPage(),
-          LandingScreen()
+          const StatusPage(),
+          const LandingScreen()
         ],
       ),
     );

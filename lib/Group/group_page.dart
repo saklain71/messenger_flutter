@@ -6,9 +6,11 @@ import 'other_msg_widget.dart';
 import 'own_msg_widget.dart';
 
 class GroupPage extends StatefulWidget {
-  const GroupPage({Key? key, required this.name, required this.userId}) : super(key: key);
+  const GroupPage({Key? key, required this.name, required this.userId, required this.groupName}) : super(key: key);
   final String name;
   final String userId;
+  final String groupName;
+
 
   @override
   State<GroupPage> createState() => _GroupPageState();
@@ -102,7 +104,7 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Group'),
+        title:  Text(widget.groupName.toString()),
       ),
       body: Column(
         children: [

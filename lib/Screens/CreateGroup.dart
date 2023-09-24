@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:messenger_flutter/CustomUi/AvatarCard.dart';
 import 'package:messenger_flutter/CustomUi/ContactCard.dart';
+import 'package:messenger_flutter/Group/group_page.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
 
 class CreateGroup extends StatefulWidget {
@@ -13,17 +14,17 @@ class CreateGroup extends StatefulWidget {
 
 class _CreateGroupState extends State<CreateGroup> {
   List<ChatModel> contacts = [
-    ChatModel(name: "Rashed", status: "A full stack developer", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Ramim", status: "Flutter Developer...........", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Sami", status: "Web developer...", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Faiyaz", status: "App developer....", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Shahed", status: "Raect developer..", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Niloy", status: "Full Stack Web", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Testing1", status: "Example work", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Testing2", status: "Sharing is caring", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Robin", status: ".....", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Rumy", status: "Love you Mom Dad", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
-    ChatModel(name: "Tester", status: "I find the bugs", icon: '', isGroup: false, time: '', currentMessage: '', id: 0),
+    ChatModel(name: "Saklain", status: "A full stack developer", icon: '', isGroup: false, time: '', currentMessage: '', id: 1),
+    ChatModel(name: "Sami", status: "Flutter Developer...........", icon: '', isGroup: false, time: '', currentMessage: '', id: 2),
+    ChatModel(name: "Faiyaz", status: "Web developer...", icon: '', isGroup: false, time: '', currentMessage: '', id: 3),
+    ChatModel(name: "Niloy", status: "App developer....", icon: '', isGroup: false, time: '', currentMessage: '', id: 4),
+    ChatModel(name: "Shahed", status: "Raect developer..", icon: '', isGroup: false, time: '', currentMessage: '', id: 5),
+    ChatModel(name: "Salman", status: "Full Stack Web", icon: '', isGroup: false, time: '', currentMessage: '', id: 6),
+    ChatModel(name: "Rashed", status: "Example work", icon: '', isGroup: false, time: '', currentMessage: '', id: 7),
+    ChatModel(name: "Onion", status: "Sharing is caring", icon: '', isGroup: false, time: '', currentMessage: '', id: 8),
+    ChatModel(name: "Robin", status: ".....", icon: '', isGroup: false, time: '', currentMessage: '', id: 9),
+    ChatModel(name: "Rumy", status: "Love you Mom Dad", icon: '', isGroup: false, time: '', currentMessage: '', id: 10),
+    ChatModel(name: "Nirob", status: "I find the bugs", icon: '', isGroup: false, time: '', currentMessage: '', id: 11),
   ];
   List<ChatModel> groupmember = [];
   @override
@@ -60,7 +61,15 @@ class _CreateGroupState extends State<CreateGroup> {
         ),
         floatingActionButton: FloatingActionButton(
             backgroundColor: Color(0xFF128C7E),
-            onPressed: () {},
+            onPressed: () {
+             Navigator.push(context, MaterialPageRoute(
+                 builder: (context)=>  GroupPage(
+                   name: '',
+                   userId: '',
+                   groupName: '',
+                 )
+             ));
+            },
             child: Icon(Icons.arrow_forward)),
         body: Stack(
           children: [

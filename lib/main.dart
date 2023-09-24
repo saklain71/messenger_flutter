@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
           fontFamily: "OpenSans",
           primaryColor: Color(0xFF075E54),
           hintColor: Color(0xFF128C7E)),
-      // home: LoginScreen(),
-      home: const HomeToGroup(),
+       //home: LoginScreen(),
+       home: const HomeToGroup(),
     );
   }
 }

@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
    ChatModel? sourceChat;
   List<ChatModel> chatmodels = [
     ChatModel(
@@ -54,13 +55,15 @@ class _LoginScreenState extends State<LoginScreen> {
       status: '',
     ),
 
-    // ChatModel(
-    //   name: "Ramim",
-    //   isGroup: true,
-    //   currentMessage: "New Post",
-    //   time: "2:00",
-    //   icon: "group.svg",
-    // ),
+    ChatModel(
+      name: "Anonymous Group",
+      isGroup: true,
+      currentMessage: "New Post",
+      time: "2:00",
+      icon: "group.svg",
+      id: 10,
+      status: 'grouping texting',
+    ),
   ];
   @override
   Widget build(BuildContext context) {

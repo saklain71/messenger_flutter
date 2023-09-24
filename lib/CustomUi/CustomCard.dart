@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:messenger_flutter/Group/group_page.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
 import 'package:messenger_flutter/Screens/IndividualPage.dart';
 
@@ -13,7 +14,16 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
+        chatModel.isGroup
+            ? Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (contex) => GroupPage(
+                  name: chatModel.name.toString(),
+                  userId: chatModel.id.toString(),
+                  groupName: 'Friends Box',
+                )))
+            : Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (contex) => IndividualPage(
