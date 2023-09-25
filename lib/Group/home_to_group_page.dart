@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:messenger_flutter/Group/group_page.dart';
 import 'package:messenger_flutter/Model/ChatModel.dart';
@@ -15,6 +17,7 @@ class _HomeToGroupState extends State<HomeToGroup> {
   TextEditingController nameController = TextEditingController();
   final formkey = GlobalKey<FormState>();
   var uuid = const Uuid();
+  int id = Random().nextInt(100);
 
   ChatModel? sourceChat;
   List<ChatModel> chatmodels = [
@@ -89,6 +92,13 @@ class _HomeToGroupState extends State<HomeToGroup> {
   ];
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print('id >>>>> $id');
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -130,7 +140,6 @@ class _HomeToGroupState extends State<HomeToGroup> {
                       )),
                   TextButton(
                       onPressed: (){
-
                         print(nameController.text.toString());
                         if(formkey.currentState!.validate()){
                           String name = nameController.text;
@@ -140,7 +149,7 @@ class _HomeToGroupState extends State<HomeToGroup> {
                             currentMessage: "New Post",
                             time: "2:00",
                             icon: "person.svg",
-                            id: 1,
+                            id: id,
                             status: 'Nothing',
                           );
                           nameController.clear();
@@ -150,7 +159,6 @@ class _HomeToGroupState extends State<HomeToGroup> {
                               MaterialPageRoute(builder: (context)=> Homescreen(
                                 chatmodels: chatmodels,
                                 sourchat: sourceChat!,
-
                               ))
                           );
                           // Navigator.push(

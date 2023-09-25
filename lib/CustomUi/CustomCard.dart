@@ -16,13 +16,12 @@ class CustomCard extends StatelessWidget {
       onTap: () {
         chatModel.isGroup
             ? Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (contex) => GroupPage(
-                  name: chatModel.name.toString(),
-                  userId: chatModel.id.toString(),
-                  groupName: 'Friends Box',
-                )))
+            context, MaterialPageRoute(
+            builder: (contex) => GroupPage(
+              name: sourchat.name.toString(),
+              userId: sourchat.id.toString(),
+              groupName: chatModel.name.toString(),
+            )),)
             : Navigator.push(
             context,
             MaterialPageRoute(

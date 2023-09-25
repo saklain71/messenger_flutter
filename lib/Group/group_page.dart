@@ -39,16 +39,20 @@ class _GroupPageState extends State<GroupPage> {
       //socket!.emit('sendMsg', 'test emit event');
       socket!.on('sendMsgServer', (msgServer){
         print('msg from server $msgServer');
+
         if(msgServer["userId"] != widget.userId){
-          setState(() {
-            listMsg.add(
-                MsgModel(
-                    type: msgServer['type'],
-                    msg: msgServer['msg'],
-                    sender: msgServer['senderName']
-                )
-            );
-          });
+          if(mounted){
+            setState(() {
+              listMsg.add(
+                  MsgModel(
+                      type: msgServer['type'],
+                      msg: msgServer['msg'],
+                      sender: msgServer['senderName']
+                  )
+              );
+            });
+          }
+
         }
       });
       socket!.on("message", (msg) {
@@ -86,6 +90,11 @@ class _GroupPageState extends State<GroupPage> {
         });
   }
 
+   void disconnectSocket() {
+    socket!.disconnect();
+    print("Socket disconneted ${socket!.disconnected}");
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -98,12 +107,20 @@ class _GroupPageState extends State<GroupPage> {
       }
     });
     connect();
+    print('id from chat box ${widget.userId}');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back,color: Colors.red,),
+          onPressed: () {
+            disconnectSocket();
+            Navigator.of(context).pop();
+          },
+        ),
         title:  Text(widget.groupName.toString()),
       ),
       body: Column(

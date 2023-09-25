@@ -16,11 +16,15 @@ class Homescreen extends StatefulWidget {
 
 class _HomescreenState extends State<Homescreen>
     with SingleTickerProviderStateMixin {
+
   TabController? _controller;
+
   @override
   void initState() {
     super.initState();
     _controller = TabController(length: 4, vsync: this, initialIndex: 1);
+    print('sourchat ${widget.sourchat.name}');
+    print('sourchat ${widget.sourchat.id}');
   }
 
   @override

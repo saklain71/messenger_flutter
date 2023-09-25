@@ -23,7 +23,7 @@ class _CreateGroupState extends State<CreateGroup> {
     ChatModel(name: "Rashed", status: "Example work", icon: '', isGroup: false, time: '', currentMessage: '', id: 7),
     ChatModel(name: "Onion", status: "Sharing is caring", icon: '', isGroup: false, time: '', currentMessage: '', id: 8),
     ChatModel(name: "Robin", status: ".....", icon: '', isGroup: false, time: '', currentMessage: '', id: 9),
-    ChatModel(name: "Rumy", status: "Love you Mom Dad", icon: '', isGroup: false, time: '', currentMessage: '', id: 10),
+    ChatModel(name: "Rumy",  status: "Love you Mom Dad", icon: '', isGroup: false, time: '', currentMessage: '', id: 10),
     ChatModel(name: "Nirob", status: "I find the bugs", icon: '', isGroup: false, time: '', currentMessage: '', id: 11),
   ];
   List<ChatModel> groupmember = [];
