@@ -17,6 +17,42 @@ class Homescreen extends StatefulWidget {
 class _HomescreenState extends State<Homescreen>
     with SingleTickerProviderStateMixin {
 
+
+
+  final List<ChatModel> chatmodels = [
+    ChatModel(
+      name: "FriendsGroup",
+      isGroup: true,
+      currentMessage: "New Post",
+      time: "2:00",
+      icon: "group.svg",
+      id: 11,
+      status: 'grouping texting',
+    ),
+
+    ChatModel(
+      name: "TeachersGroup",
+      isGroup: true,
+      currentMessage: "New Post",
+      time: "2:00",
+      icon: "group.svg",
+      id: 12,
+      status: 'grouping texting',
+    ),
+
+    ChatModel(
+      name: "StudentsGroup",
+      isGroup: true,
+      currentMessage: "New Post",
+      time: "2:00",
+      icon: "group.svg",
+      id: 13,
+      status: 'grouping texting',
+    ),
+  ];
+
+
+
   TabController? _controller;
 
   @override
@@ -25,6 +61,7 @@ class _HomescreenState extends State<Homescreen>
     _controller = TabController(length: 4, vsync: this, initialIndex: 1);
     print('sourchat ${widget.sourchat.name}');
     print('sourchat ${widget.sourchat.id}');
+    widget.chatmodels.add(chatmodels as ChatModel);
   }
 
   @override

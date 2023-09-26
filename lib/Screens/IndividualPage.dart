@@ -65,17 +65,21 @@ class _IndividualPageState extends State<IndividualPage> {
       print("Connected");
       socket.on("message", (msg) {
         print("msg $msg");
-        setMessage("destination",
-          msg["message"],
-          msg["path"],
-        );
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+        if(mounted){
+          setMessage("destination",
+              msg["message"],
+              // msg["path"],
+         );
+        }
+        // _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     });
+
     // socket.on("message", (data) {
     //   print("message from server $data");
     // });
+
     print(socket.connected);
     socket.onDisconnect((_) => print('Connection Disconnection'));
     socket.onConnectError((err) => print("onConnectError $err"));
@@ -84,32 +88,30 @@ class _IndividualPageState extends State<IndividualPage> {
 
   }
 
-  void sendMessage(String message, int sourceId, int targetId, String path) {
-    setMessage("source", message, path);
-    socket.emit("message",
-        {"message": message,
+  void sendMessage(String message, int sourceId, int targetId, ) {
+    setMessage("source", message, );
+    socket.emit("message", {
+          "message": message,
           "sourceId": sourceId,
           "targetId": targetId,
-          "path": path
+          // "path": path
         });
   }
 
-  void setMessage(String type, String message, String path) {
+  void setMessage(String type, String message,) {
     MessageModel messageModel = MessageModel(
         type: type,
         message: message,
         time: DateTime.now().toString().substring(10, 16),
-        path: path);
+        // path: path
+    );
     print("message $messages");
 
-    if (this.mounted) {
+    if (mounted) {
       setState(() {
         messages.add(messageModel);
       });
     }
-    // setState(() {
-    //   messages.add(messageModel);
-    // });
     print("message $messages");
   }
 
@@ -132,7 +134,7 @@ class _IndividualPageState extends State<IndividualPage> {
     var data = json.decode(httpResponse.body);
     print(data['path']);
     print("response ${response.statusCode}");
-    setMessage("source", message, path);
+    setMessage("source", message);
     socket.emit("message",
         {"message": message,
           "sourceId": widget.sourchat.id,
@@ -279,7 +281,7 @@ class _IndividualPageState extends State<IndividualPage> {
                         if (messages[index].type == "source") {
                           if(messages[index].path != null){
                             return OwnFileCard(
-                                path: messages[index].path,
+                                path: messages[index].path!,
                                 message: messages[index].message,
                                 time : messages[index].time
                             );
@@ -415,9 +417,9 @@ class _IndividualPageState extends State<IndividualPage> {
                                             _controller.text,
                                             widget.sourchat.id,
                                             widget.chatModel.id,
-                                            ""
+
                                         );
-                                           _controller.clear();
+                                        _controller.clear();
                                         setState(() {
                                           sendButton = false;
                                         });

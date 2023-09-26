@@ -34,9 +34,52 @@ class _GroupPageState extends State<GroupPage> {
     });
     socket!.connect();
     //socket.emit("signin", widget.sourchat.id);
+
     socket!.onConnect((data) {
       print("Connected");
       //socket!.emit('sendMsg', 'test emit event');
+
+      // Join a group (replace 'group1' with the desired group name)
+      socket!.emit('joinGroup', [widget.groupName.toString()]);
+
+      // Send a message to the server (replace 'group1' with the desired group name)
+      // socket!.emit('sendMsgToGroup', {'group': 'group1', 'message': 'Hello, group1!'});
+
+      socket!.on('messageToGroup', (data) {
+        print('Received message from group: $data');
+        if(data["userId"] != widget.userId){
+          if(mounted){
+            setState(() {
+              listMsg.add(
+                MsgModel(
+                    type: data['type'],
+                    msg: data['msg'],
+                    sender: data['senderName'],
+                )
+              );
+            });
+          }
+        }
+      });
+
+      // socket!.on('messageToGroup', (msgServer){
+      //   print('msg from server $msgServer');
+      //   if(msgServer["userId"] != widget.userId){
+      //     if(mounted){
+      //       setState(() {
+      //         listMsg.add(
+      //             MsgModel(
+      //                 type: msgServer['type'],
+      //                 msg: msgServer['msg'],
+      //                 sender: msgServer['senderName']
+      //             )
+      //         );
+      //       });
+      //     }
+      //
+      //   }
+      // });
+
       socket!.on('sendMsgServer', (msgServer){
         print('msg from server $msgServer');
 
@@ -55,10 +98,12 @@ class _GroupPageState extends State<GroupPage> {
 
         }
       });
+
+
       socket!.on("message", (msg) {
         print("msg $msg");
-        // _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     });
 
@@ -81,13 +126,23 @@ class _GroupPageState extends State<GroupPage> {
     setState(() {
       listMsg;
     });
-    socket!.emit('sendMsg',
-        {
-          'type': 'ownMsg',
-          'msg': msg,
-          'senderName': senderName,
-          "userId": widget.userId
-        });
+
+     socket!.emit('sendMsgToGroup', {
+       'group': widget.groupName.toString(),
+       'type': 'ownMsg',
+       'msg': msg,
+       'senderName': senderName,
+       "userId": widget.userId
+      }
+     );
+
+
+    // socket!.emit('sendMsg', {
+    //       'type': 'ownMsg',
+    //       'msg': msg,
+    //       'senderName': senderName,
+    //       "userId": widget.userId
+    //     });
   }
 
    void disconnectSocket() {

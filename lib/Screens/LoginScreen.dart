@@ -56,12 +56,32 @@ class _LoginScreenState extends State<LoginScreen> {
     ),
 
     ChatModel(
-      name: "Anonymous Group",
+      name: "FriendsGroup",
       isGroup: true,
       currentMessage: "New Post",
       time: "2:00",
       icon: "group.svg",
-      id: 10,
+      id: 11,
+      status: 'grouping texting',
+    ),
+
+    ChatModel(
+      name: "TeachersGroup",
+      isGroup: true,
+      currentMessage: "New Post",
+      time: "2:00",
+      icon: "group.svg",
+      id: 12,
+      status: 'grouping texting',
+    ),
+
+    ChatModel(
+      name: "StudentsGroup",
+      isGroup: true,
+      currentMessage: "New Post",
+      time: "2:00",
+      icon: "group.svg",
+      id: 13,
       status: 'grouping texting',
     ),
   ];
