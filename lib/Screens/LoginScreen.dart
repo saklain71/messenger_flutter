@@ -23,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
       time: "4:00",
       icon: "person.svg",
       id: 1,
-      status: '',
+      status: 'Nothing',
     ),
     ChatModel(
       name: "Sami",
@@ -32,9 +32,8 @@ class _LoginScreenState extends State<LoginScreen> {
       time: "13:00",
       icon: "person.svg",
       id: 2,
-      status: '',
+      status: 'Nothing',
     ),
-
     ChatModel(
       name: "Faiyaz",
       isGroup: false,
@@ -42,9 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
       time: "8:00",
       icon: "person.svg",
       id: 3,
-      status: '',
+      status: 'Nothing',
     ),
-
     ChatModel(
       name: "Niloy",
       isGroup: false,
@@ -52,38 +50,38 @@ class _LoginScreenState extends State<LoginScreen> {
       time: "2:00",
       icon: "person.svg",
       id: 4,
-      status: '',
+      status: 'Nothing',
     ),
 
-    ChatModel(
-      name: "FriendsGroup",
-      isGroup: true,
-      currentMessage: "New Post",
-      time: "2:00",
-      icon: "group.svg",
-      id: 11,
-      status: 'grouping texting',
-    ),
-
-    ChatModel(
-      name: "TeachersGroup",
-      isGroup: true,
-      currentMessage: "New Post",
-      time: "2:00",
-      icon: "group.svg",
-      id: 12,
-      status: 'grouping texting',
-    ),
-
-    ChatModel(
-      name: "StudentsGroup",
-      isGroup: true,
-      currentMessage: "New Post",
-      time: "2:00",
-      icon: "group.svg",
-      id: 13,
-      status: 'grouping texting',
-    ),
+    // ChatModel(
+    //   name: "FriendsGroup",
+    //   isGroup: true,
+    //   currentMessage: "New Post",
+    //   time: "2:00",
+    //   icon: "group.svg",
+    //   id: 11,
+    //   status: 'grouping texting',
+    // ),
+    //
+    // ChatModel(
+    //   name: "TeachersGroup",
+    //   isGroup: true,
+    //   currentMessage: "New Post",
+    //   time: "2:00",
+    //   icon: "group.svg",
+    //   id: 12,
+    //   status: 'grouping texting',
+    // ),
+    //
+    // ChatModel(
+    //   name: "StudentsGroup",
+    //   isGroup: true,
+    //   currentMessage: "New Post",
+    //   time: "2:00",
+    //   icon: "group.svg",
+    //   id: 13,
+    //   status: 'grouping texting',
+    // ),
   ];
   @override
   Widget build(BuildContext context) {

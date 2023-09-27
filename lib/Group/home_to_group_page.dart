@@ -62,33 +62,34 @@ class _HomeToGroupState extends State<HomeToGroup> {
       status: '',
     ),
 
-    ChatModel(
-      name: "FriendsGroup",
-      isGroup: true,
-      currentMessage: "New Post",
-      time: "2:00",
-      icon: "group.svg",
-      id: 11,
-      status: 'grouping texting',
-    ),
-    ChatModel(
-      name: "TeachersGroup",
-      isGroup: true,
-      currentMessage: "New Post",
-      time: "2:00",
-      icon: "group.svg",
-      id: 12,
-      status: 'grouping texting',
-    ),
-    ChatModel(
-      name: "StudentsGroup",
-      isGroup: true,
-      currentMessage: "New Post",
-      time: "2:00",
-      icon: "group.svg",
-      id: 13,
-      status: 'grouping texting',
-    ),
+
+    // ChatModel(
+    //   name: "FriendsGroup",
+    //   isGroup: true,
+    //   currentMessage: "New Post",
+    //   time: "2:00",
+    //   icon: "group.svg",
+    //   id: 11,
+    //   status: 'grouping texting',
+    // ),
+    // ChatModel(
+    //   name: "TeachersGroup",
+    //   isGroup: true,
+    //   currentMessage: "New Post",
+    //   time: "2:00",
+    //   icon: "group.svg",
+    //   id: 12,
+    //   status: 'grouping texting',
+    // ),
+    // ChatModel(
+    //   name: "StudentsGroup",
+    //   isGroup: true,
+    //   currentMessage: "New Post",
+    //   time: "2:00",
+    //   icon: "group.svg",
+    //   id: 13,
+    //   status: 'grouping texting',
+    // ),
   ];
 
   @override
@@ -153,7 +154,7 @@ class _HomeToGroupState extends State<HomeToGroup> {
                             id: id,
                             status: 'Nothing',
                           );
-                          chatmodels.add(sourceChat!);
+                          //chatmodels.add(sourceChat!);
                           nameController.clear();
                           Navigator.pop(context);
                           Navigator.push(

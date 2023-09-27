@@ -20,6 +20,7 @@ class _HomescreenState extends State<Homescreen>
 
 
   final List<ChatModel> chatmodels = [
+
     ChatModel(
       name: "FriendsGroup",
       isGroup: true,
@@ -59,9 +60,7 @@ class _HomescreenState extends State<Homescreen>
   void initState() {
     super.initState();
     _controller = TabController(length: 4, vsync: this, initialIndex: 1);
-    print('sourchat ${widget.sourchat.name}');
-    print('sourchat ${widget.sourchat.id}');
-    widget.chatmodels.add(chatmodels as ChatModel);
+    widget.chatmodels.addAll(chatmodels);
   }
 
   @override

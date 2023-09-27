@@ -37,6 +37,12 @@ class _IndividualPageState extends State<IndividualPage> {
   XFile? file;
   int popTime = 0;
 
+
+  void disconnectSocket() {
+    socket.disconnect();
+    print("Socket disconneted ${socket.disconnected}");
+  }
+
   @override
   void initState() {
     super.initState();
@@ -60,9 +66,11 @@ class _IndividualPageState extends State<IndividualPage> {
       "autoConnect": false,
     });
     socket.connect();
-    socket.emit("signin", widget.sourchat.id);
+    // socket.emit("signin", widget.sourchat.id);
     socket.onConnect((data) {
       print("Connected");
+      socket.emit("joinChatRoom", widget.sourchat.id);
+
       socket.on("message", (msg) {
         print("msg $msg");
         if(mounted){
@@ -70,6 +78,8 @@ class _IndividualPageState extends State<IndividualPage> {
               msg["message"],
               // msg["path"],
          );
+          _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+              duration: Duration(milliseconds: 300), curve: Curves.easeOut);
         }
         // _scrollController.animateTo(_scrollController.position.maxScrollExtent,
         //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
@@ -160,32 +170,12 @@ class _IndividualPageState extends State<IndividualPage> {
             child: AppBar(
               leadingWidth: 70,
               titleSpacing: 0,
-              leading: InkWell(
-                onTap: () {
-                  Navigator.pop(context);
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back,color: Colors.red,),
+                onPressed: () {
+                  disconnectSocket();
+                  Navigator.of(context).pop();
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    Icon(
-                      Icons.arrow_back,
-                      size: 24,
-                    ),
-                    CircleAvatar(
-                      child: SvgPicture.asset(
-                        widget.chatModel.isGroup
-                            ? "assets/groups.svg"
-                            : "assets/person.svg",
-                        color: Colors.white,
-                        height: 36,
-                        width: 36,
-                      ),
-                      radius: 20,
-                      backgroundColor: Colors.blueGrey,
-                    ),
-                  ],
-                ),
               ),
               title: InkWell(
                 onTap: () {},
