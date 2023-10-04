@@ -45,6 +45,7 @@ class _GroupPageState extends State<GroupPage> {
       // Send a message to the server (replace 'group1' with the desired group name)
       // socket!.emit('sendMsgToGroup', {'group': 'group1', 'message': 'Hello, group1!'});
 
+
       socket!.on('messageToGroup', (data) {
         print('Received message from group: $data');
         if(data["userId"] != widget.userId){

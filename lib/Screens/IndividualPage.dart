@@ -32,15 +32,16 @@ class _IndividualPageState extends State<IndividualPage> {
   List<MessageModel> messages = [];
   TextEditingController _controller = TextEditingController();
   ScrollController _scrollController = ScrollController();
-  late IO.Socket socket;
+  IO.Socket? socket;
   ImagePicker picker = ImagePicker();
   XFile? file;
   int popTime = 0;
+  String? room;
 
 
   void disconnectSocket() {
-    socket.disconnect();
-    print("Socket disconneted ${socket.disconnected}");
+    socket!.disconnect();
+    print("Socket disconneted ${socket!.disconnected}");
   }
 
   @override
@@ -65,24 +66,34 @@ class _IndividualPageState extends State<IndividualPage> {
       "transports": ["websocket"],
       "autoConnect": false,
     });
-    socket.connect();
-    // socket.emit("signin", widget.sourchat.id);
-    socket.onConnect((data) {
+    socket!.connect();
+    socket!.emit("signin", widget.sourchat.id);
+    socket!.onConnect((data) {
       print("Connected");
-      socket.emit("joinChatRoom", widget.sourchat.id);
 
-      socket.on("message", (msg) {
-        print("msg $msg");
+        socket!.emit('joinPrivateRoom', [widget.sourchat.id, widget.chatModel.id]);
+
+      // var id = [widget.sourchat.id,widget.chatModel.id];
+      // id.sort();
+      // room = "private-${id.join('-')}";
+       // socket!.emit('joinPrivateRoom', "private-1-2");
+
+      // socket.on('joinPrivateRoom', (privateRoom){
+      // if(mounted){
+      //   setState(() {
+      //     room = privateRoom;
+      //   });
+      //   print('join-private-room >>> $room');
+      // }
+      // });
+
+      socket!.on('recieveMessage', (msg) {
+        print("recieveMessage  $msg");
         if(mounted){
-          setMessage("destination",
-              msg["message"],
-              // msg["path"],
-         );
+          setMessage('destination', msg['message']);
           _scrollController.animateTo(_scrollController.position.maxScrollExtent,
               duration: Duration(milliseconds: 300), curve: Curves.easeOut);
         }
-        // _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        //     duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     });
 
@@ -90,21 +101,31 @@ class _IndividualPageState extends State<IndividualPage> {
     //   print("message from server $data");
     // });
 
-    print(socket.connected);
-    socket.onDisconnect((_) => print('Connection Disconnection'));
-    socket.onConnectError((err) => print("onConnectError $err"));
-    socket.onError((err) => print("onError $err"));
-    print(socket.disconnected);
+    print(socket!.connected);
+    socket!.onDisconnect((_) => print('Connection Disconnection'));
+    socket!.onConnectError((err) => print("onConnectError $err"));
+    socket!.onError((err) => print("onError $err"));
+    print(socket!.disconnected);
 
   }
 
   void sendMessage(String message, int sourceId, int targetId, ) {
-    setMessage("source", message, );
-    socket.emit("message", {
+    //setMessage("source", message );
+    MessageModel ownMsg = MessageModel(
+      type: "source",
+      message: message,
+      time: DateTime.now().toString().substring(10, 16),
+      // path: path
+    );
+    messages.add(ownMsg);
+    setState(() {
+      messages;
+    });
+    socket!.emit("sendPrivateMessage", {
+          "privateRoom": "private-1-2",
           "message": message,
           "sourceId": sourceId,
           "targetId": targetId,
-          // "path": path
         });
   }
 
@@ -145,7 +166,7 @@ class _IndividualPageState extends State<IndividualPage> {
     print(data['path']);
     print("response ${response.statusCode}");
     setMessage("source", message);
-    socket.emit("message",
+    socket!.emit("message",
         {"message": message,
           "sourceId": widget.sourchat.id,
           "targetId": widget.chatModel.id,
@@ -206,11 +227,11 @@ class _IndividualPageState extends State<IndividualPage> {
                 // IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
 
                 Center(child:
-                Text(socket.connected.toString(),
+                Text(socket!.connected.toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
-                      color: socket.connected ? Colors.blueGrey : Colors.red,
+                      color: socket!.connected ? Colors.blueGrey : Colors.red,
                   ))),
                 IconButton(icon: Icon(Icons.call), onPressed: () {}),
                 PopupMenuButton<String>(
@@ -407,7 +428,6 @@ class _IndividualPageState extends State<IndividualPage> {
                                             _controller.text,
                                             widget.sourchat.id,
                                             widget.chatModel.id,
-
                                         );
                                         _controller.clear();
                                         setState(() {
