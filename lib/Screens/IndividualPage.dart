@@ -36,7 +36,7 @@ class _IndividualPageState extends State<IndividualPage> {
   ImagePicker picker = ImagePicker();
   XFile? file;
   int popTime = 0;
-  String? room;
+  String? privateRoom;
 
 
   void disconnectSocket() {
@@ -71,12 +71,19 @@ class _IndividualPageState extends State<IndividualPage> {
     socket!.onConnect((data) {
       print("Connected");
 
-        socket!.emit('joinPrivateRoom', [widget.sourchat.id, widget.chatModel.id]);
+      List<int> numbers = [widget.sourchat.id,widget.chatModel.id];
+      numbers.sort();
+      print("$numbers private-${numbers.join('-')}");
+      String room = "private-${numbers.join('-')}";
+      privateRoom = room;
+      print(room);
+
+      socket!.emit('joinPrivateRoom', [room]);
 
       // var id = [widget.sourchat.id,widget.chatModel.id];
       // id.sort();
       // room = "private-${id.join('-')}";
-       // socket!.emit('joinPrivateRoom', "private-1-2");
+      // socket!.emit('joinPrivateRoom', "private-1-2");
 
       // socket.on('joinPrivateRoom', (privateRoom){
       // if(mounted){
@@ -122,7 +129,7 @@ class _IndividualPageState extends State<IndividualPage> {
       messages;
     });
     socket!.emit("sendPrivateMessage", {
-          "privateRoom": "private-1-2",
+          "privateRoom": privateRoom.toString(),
           "message": message,
           "sourceId": sourceId,
           "targetId": targetId,
